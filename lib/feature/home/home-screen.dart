@@ -12,6 +12,15 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
+  final ImagePicker picker = ImagePicker();
+  XFile? image;
+  void opencamera() async {
+    await picker.pickImage(source: ImageSource.camera);
+  }
+
+  void opengallery() async {
+    await picker.pickImage(source: ImageSource.gallery);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,23 +33,30 @@ class _HomescreenState extends State<Homescreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 100.r,
-                backgroundColor: Colors.blueAccent.shade100,
-                child: Icon(
-                  Icons.person,
-                  size: 150.r,
-                  color: Colors.white,
+              Visibility(
+                visible: image == null,
+                child: CircleAvatar(
+                  radius: 100.r,
+                  backgroundColor: Colors.blueAccent.shade100,
+                  child: Icon(
+                    Icons.person,
+                    size: 150.r,
+                    color: Colors.white,
+                  ),
                 ),
+                replacement: Icon(Icons.add),
               ),
               CustomAppButton(
                 title: "upload from camera",
-                onpressed: () async {
-                  await picker.pickImage(source: ImageSource.camera);
+                onpressed: () {
+                  opencamera();
                 },
               ),
               CustomAppButton(
                 title: "upload from gallery",
+                onpressed: () {
+                  opengallery();
+                },
               ),
               Divider(color: Colors.grey),
               TextFormField(
